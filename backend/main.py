@@ -103,7 +103,7 @@ class BackendServer(BaseHTTPRequestHandler):
 
                 # Requests for DB Server
                 try:
-                    random = 0
+                    random = randint(0, 1)
                     url = const.DB_URL[random]
                     
                     data = json.dumps({ 'key': key, 'value': value })
