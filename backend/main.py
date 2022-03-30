@@ -43,14 +43,18 @@ class BackendServer(BaseHTTPRequestHandler):
             else:
                 # Get parameters
                 key = query['key']
-
+                
                 # Requests for DB Server
                 try:
-
-                    for ip in const.DB_URL:
-                        r = requests.get(
-                            f'{ip}/phones/show?key={key}'
-                        )
+                    hashval = hash(key)
+                    if (hashval % 2 == 0):
+                        url = const.DB_URL[0]
+                    else:
+                        url = const.DB_URL[1]
+                    
+                    r = requests.get(
+                        f'{url}/phones/show?key={key}'
+                    )
 
                     res = { "data": json.loads(r.text)['data'] }
                     response(self, 202, res) 
@@ -103,8 +107,11 @@ class BackendServer(BaseHTTPRequestHandler):
 
                 # Requests for DB Server
                 try:
-                    random = randint(0, 1)
-                    url = const.DB_URL[random]
+                    hashval = hash(key)
+                    if (hashval % 2 == 0):
+                        url = const.DB_URL[0]
+                    else:
+                        url = const.DB_URL[1]
                     
                     data = json.dumps({ 'key': key, 'value': value })
 
